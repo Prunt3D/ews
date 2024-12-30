@@ -284,6 +284,16 @@ package body EWS.HTTP is
    end Get_Body;
 
 
+   function Get_Body
+     (From : Request) return Ada.Strings.Unbounded.Unbounded_String
+   is
+   begin
+      --  TODO: Does this avoid putting a copy on the stack?
+      return Ada.Strings.Unbounded.To_Unbounded_String
+        (SS.Value (From.Content).all);
+   end Get_Body;
+
+
    --  Content/attachment management  --
 
    function Get_Attachments (From : Request) return Attachments

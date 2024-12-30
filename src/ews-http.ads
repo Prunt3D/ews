@@ -24,6 +24,7 @@ pragma Ada_2012;
 with Ada.Exceptions;
 with Ada.IO_Exceptions;
 with Ada.Streams;
+with Ada.Strings.Unbounded;
 with GNAT.Sockets;
 
 private with Ada.Finalization;
@@ -86,6 +87,8 @@ package EWS.HTTP is
 
    function Get_Head (From : Request) return String;
    function Get_Body (From : Request) return String;
+   function Get_Body
+     (From : Request) return Ada.Strings.Unbounded.Unbounded_String;
 
    -------------------------------------
    --  Content/attachment management  --
