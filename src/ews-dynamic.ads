@@ -30,15 +30,15 @@ private with EWS.Reference_Counted_Pointers_G;
 
 package EWS.Dynamic with Elaborate_Body is
 
-   function Find
-     (For_Request : not null access HTTP.Request) return HTTP.Response'Class;
-
    type Dynamic_Response (R : HTTP.Request_P)
    is new HTTP.Response with private;
 
    type Creator
    is access function (From_Request : HTTP.Request_P)
-                      return Dynamic_Response'Class;
+                      return HTTP.Response'Class;
+
+   function Find
+     (For_Request : not null access HTTP.Request) return Creator;
 
    --  The server will call the given Creator when the given URL is
    --  requested.

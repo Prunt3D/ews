@@ -153,21 +153,18 @@ package body EWS.Dynamic is
 
 
    function Find
-     (For_Request : not null access HTTP.Request) return HTTP.Response'Class
+     (For_Request : not null access HTTP.Request) return Creator
    is
       For_URL : constant HTTP.URL := HTTP.Get_URL (For_Request.all);
       Reg : Cell_P := Registry;
    begin
       while Reg /= null loop
          if Reg.The_URL.all = For_URL then
-            return Reg.The_Creator (HTTP.Request_P (For_Request));
+            return Reg.The_Creator;
          end if;
          Reg := Reg.Next;
       end loop;
-      if Default_Creator /= null then
-         return Default_Creator (HTTP.Request_P (For_Request));
-      end if;
-      return HTTP.Not_Found (For_Request);
+      return Default_Creator;
    end Find;
 
 

@@ -519,11 +519,11 @@ package body EWS.HTTP is
    is
    begin
       declare
-         R : constant Response'Class
-           := Dynamic.Find (For_Request);
+         use type Dynamic.Creator;
+         R : constant Dynamic.Creator := Dynamic.Find (For_Request);
       begin
-         if R in Dynamic.Dynamic_Response'Class then
-            return R;
+         if R /= null then
+            return R (Request_P (For_Request));
          end if;
       end;
       return Static.Find (For_Request);
