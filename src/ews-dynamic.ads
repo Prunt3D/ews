@@ -23,6 +23,7 @@ pragma Ada_2012;
 with Ada.Streams;
 with EWS.HTTP;
 with EWS.Types;
+with Ada.Strings.Unbounded;
 
 private with Ada.Finalization;
 private with EWS.Reference_Counted_Pointers_G;
@@ -54,8 +55,14 @@ package EWS.Dynamic with Elaborate_Body is
    procedure Set_Content (This : in out Dynamic_Response;
                           To   :        String);
    not overriding
+   procedure Set_Content (This : in out Dynamic_Response;
+                          To   :        Ada.Strings.Unbounded.Unbounded_String);
+   not overriding
    procedure Append (This   : in out Dynamic_Response;
                      Adding :        String);
+   not overriding
+   procedure Append (This   : in out Dynamic_Response;
+                     Adding :        Ada.Strings.Unbounded.Unbounded_String);
 
    --  Utility for HTML/XML, for adding a single element with text
    --  content. Add elements containing other elements "by hand".
@@ -92,6 +99,10 @@ private
    procedure Finalize (U : in out Unbounded_String);
    not overriding
    procedure Append (To : in out Unbounded_String; S : String);
+   not overriding
+   procedure Append
+     (To : in out Unbounded_String;
+      S  :        Ada.Strings.Unbounded.Unbounded_String);
 
    procedure Write (To : not null access Ada.Streams.Root_Stream_Type'Class;
                     U  :                 Unbounded_String);

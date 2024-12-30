@@ -60,6 +60,18 @@ package body EWS.Dynamic is
    end Append;
 
 
+   procedure Append (This : in out Dynamic_Response;
+                     Adding : Ada.Strings.Unbounded.Unbounded_String) is
+      use type Unbounded_String_Pointers.Pointer;
+   begin
+      if This.Content = Unbounded_String_Pointers.Null_Pointer then
+         This.Content :=
+           Unbounded_String_Pointers.Create (new Unbounded_String);
+      end if;
+      Append (Unbounded_String_Pointers.Value (This.Content).all, Adding);
+   end Append;
+
+
    procedure Append (To : in out Unbounded_String; S : String) is
    begin
       if To.Last + S'Length > To.Buf'Length then
@@ -79,6 +91,16 @@ package body EWS.Dynamic is
       end if;
       To.Buf (To.Last + 1 .. To.Last + S'Length) := S;
       To.Last := To.Last + S'Length;
+   end Append;
+
+
+   procedure Append
+     (To : in out Unbounded_String;
+      S  :        Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      for I in 1 .. Ada.Strings.Unbounded.Length (S) loop
+         Append (To, "" & Ada.Strings.Unbounded.Element (S, I));
+      end loop;
    end Append;
 
 
@@ -170,6 +192,13 @@ package body EWS.Dynamic is
 
    procedure Set_Content (This : in out Dynamic_Response;
                           To : String) is
+   begin
+      This.Content := Unbounded_String_Pointers.Create (new Unbounded_String);
+      Append (This, To);
+   end Set_Content;
+
+   procedure Set_Content (This : in out Dynamic_Response;
+                          To : Ada.Strings.Unbounded.Unbounded_String) is
    begin
       This.Content := Unbounded_String_Pointers.Create (new Unbounded_String);
       Append (This, To);
